@@ -86,10 +86,20 @@ public class Dimension {
     }
 
     /**
-     * Path where the world should be saved to. For custom dimensions it depends on the name and namespace.
+     * Path where the world should be saved to. For custom dimensions it depends on the name and namespace. Starting
+     * from 26.1 all default dimensions are stored in the dimensions subfolder instead of the legacy DIM-1/DIM1 folder.
      */
     public String getPath() {
         if (namespace.equals("minecraft")) {
+            if (Config.versionReporter().isAtLeast(Version.V26_1)) {
+                switch (name) {
+                    case "overworld": return "dimensions/minecraft/overworld";
+                    case "the_nether": return "dimensions/minecraft/the_nether";
+                    case "the_end": return "dimensions/minecraft/the_end";
+                    default: return Paths.get("dimensions", namespace, name).toString();
+                }
+            }
+
             switch (name) {
                 case "the_nether": return "DIM-1";
                 case "the_end": return "DIM1";
