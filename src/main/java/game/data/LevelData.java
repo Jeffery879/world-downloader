@@ -180,6 +180,41 @@ public class LevelData {
 
         // write the file
         NbtUtil.write(root, file.toPath());
+
+        // 26.1+ moves world gen settings out of level.dat into a registry data file
+        if (Config.versionReporter().isAtLeast(Version.V26_1)) {
+            writeWorldGenSettingsFile(data);
+        }
+    }
+
+    /**
+     * Write the world gen settings to the registry data file used since 26.1. Technically the game still reads the
+     * settings from level.dat but with a missing data file it refuses to load, only saying the overworld settings are
+     * missing.
+     */
+    private void writeWorldGenSettingsFile(CompoundTag data) throws IOException {
+        Tag wgs = data.get("WorldGenSettings");
+        if (!(wgs instanceof CompoundTag)) {
+            return;
+        }
+
+        CompoundTag settings = new CompoundTag();
+        for (NamedTag t : (CompoundTag) wgs) {
+            if ("generate_features".equals(t.name)) {
+                settings.add(new NamedTag("generate_structures", t.tag));
+            } else {
+                settings.add(t);
+            }
+        }
+
+        Tag root = new NamedTag("", new CompoundTag(Arrays.asList(
+                new NamedTag("data", settings),
+                new NamedTag("DataVersion", new IntTag(Config.getDataVersion()))
+        )));
+
+        Path dir = Paths.get(outputDir.toString(), "data", "minecraft");
+        Files.createDirectories(dir);
+        NbtUtil.write(root, Paths.get(dir.toString(), "world_gen_settings.dat"));
     }
 
     private void enableWorldGeneration(CompoundTag data) {
