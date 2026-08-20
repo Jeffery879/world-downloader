@@ -1,6 +1,7 @@
 package game.data.maps;
 
 import config.Config;
+import config.Version;
 import packets.DataTypeProvider;
 import se.llbit.nbt.CompoundTag;
 import se.llbit.nbt.IntTag;
@@ -26,9 +27,8 @@ import static util.ExceptionHandling.attempt;
  * Handle storing of the map item.
  */
 public class MapRegistry {
-    private final String registryFileName = "idcounts.dat";
-    private final Path dataDir = PathUtils.toPath(Config.getWorldOutputDir(),  "data");
-    private final File registryFile = Paths.get(dataDir.toString(), registryFileName).toFile();
+    private final File registryFile;
+    private final Path mapsDir;
 
     private final Map<Integer, PlayerMap> maps;
     private final Set<Integer> updatedSince;
@@ -39,6 +39,14 @@ public class MapRegistry {
     public MapRegistry() {
         this.maps = new ConcurrentHashMap<>();
         this.updatedSince = ConcurrentHashMap.newKeySet();
+
+        // 26.1+ moves map data into the data/minecraft subfolder and renames the id registry
+        boolean newLayout = Config.versionReporter().isAtLeast(Version.V26_1);
+        Path dataDir = PathUtils.toPath(Config.getWorldOutputDir(), "data");
+        this.mapsDir = newLayout ? Paths.get(dataDir.toString(), "minecraft", "maps") : dataDir;
+        this.registryFile = (newLayout
+                ? Paths.get(dataDir.toString(), "minecraft", "last_id.dat")
+                : Paths.get(dataDir.toString(), "idcounts.dat")).toFile();
 
         try {
             read();
@@ -67,7 +75,8 @@ public class MapRegistry {
      * Save the number of maps in the idcount file, then save each map that changed since we saved last time.
      */
     public void save() throws IOException {
-        Files.createDirectories(dataDir);
+        Files.createDirectories(registryFile.toPath().getParent());
+        Files.createDirectories(mapsDir);
 
         CompoundTag data = new CompoundTag();
         data.add("map", new IntTag(maxMapId));
@@ -79,7 +88,7 @@ public class MapRegistry {
         updatedSince.forEach((id) -> {
             PlayerMap map = maps.get(id);
             try {
-                NbtUtil.write(new NamedTag("", map.toNbt()), Paths.get(dataDir.toString(), "map_" + id + ".dat"));
+                NbtUtil.write(new NamedTag("", map.toNbt()), Paths.get(mapsDir.toString(), id + ".dat"));
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
