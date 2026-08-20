@@ -1,82 +1,85 @@
-# minecraft-world-downloader
+# world-downloader
+
 A Minecraft world downloader that works as a proxy server between the client and the server to read & save chunk data. Download multiplayer worlds by connecting to them and walking around. Chunks can be sent back to the client to extend the render distance.
 
-
-### Downloads  <a href="https://github.com/mircokroon/minecraft-world-downloader/releases/latest"><img align="right" src="https://img.shields.io/github/downloads/mircokroon/minecraft-world-downloader/total.svg"></a>
-Windows launcher: [world-downloader-launcher.exe](https://github.com/mircokroon/minecraft-world-downloader-launcher/releases/latest/download/world-downloader-launcher.exe)
-
-Latest cross-platform jar (command-line support): [world-downloader.jar](https://github.com/mircokroon/minecraft-world-downloader/releases/latest/download/world-downloader.jar)
+> **Note:** This is a modified fork of [mircokroon/minecraft-world-downloader](https://github.com/mircokroon/minecraft-world-downloader). See [Attribution & License](#attribution--license) below for details.
+>
+> This fork does not currently provide pre-built downloads — you'll need to [build it from source](#building-from-source).
 
 ### Basic usage
-[Download](https://github.com/mircokroon/minecraft-world-downloader-launcher/releases/latest/download/world-downloader-launcher.exe) the latest release and run it. Enter the server address in the address field and press start.
 
-<img src="https://i.imgur.com/yH8SH5C.png">
+After [building the jar](#building-from-source), run it using the command-line. Enter the server address with the `-s` flag (or via the GUI address field, if using the GUI) and start.
 
 Instead of connecting to the server itself, connect to `localhost` in Minecraft to start downloading the world.
-<img src="https://i.imgur.com/wKMnXfq.png">
 
-If you run into any problems, check the [FAQ](https://github.com/mircokroon/minecraft-world-downloader/wiki/FAQ) page for some common issues. 
+If you run into any problems, check the [FAQ](https://github.com/mircokroon/minecraft-world-downloader/wiki/FAQ) page on the original project for common issues.
 
-### [Features](https://github.com/mircokroon/minecraft-world-downloader/wiki/Features)
+### Features
+
 - Requires no client modifications and as such works with every game client, vanilla or not
 - Automatically merge into previous downloads or existing worlds
 - Save chests and other inventories by opening them
 - Extend the client's render distance by sending chunks downloaded previously back to the client
-- Overview map of chunks that have been saved:
-
-<img src="https://i.imgur.com/7FIJ6fZ.png" width="80%" title="Example of the GUI showing all the downloaded chunks as white squares, which ones from a previous download greyed out.">
+- Overview map of chunks that have been saved
 
 ### Requirements
+
 - Java 21 or higher
 - Minecraft version 1.12.2+ // 1.13.2+ // 1.14.1+ // 1.15.2+ // 1.16.2+ // 1.17+ // 1.18+ // 1.19.3+ // 1.20+ // 1.21+ // 26.1+
 
 ### Command-line
-[Download](https://github.com/mircokroon/minecraft-world-downloader/releases/latest/download/world-downloader.jar) the cross-platform `world-downloader.jar` and run it using the command-line:
+
+Once you've [built the jar](#building-from-source), run it from the `target/` directory:
 
 ```
 java -jar world-downloader.jar
 ```
 
 Arguments can be specified to change the behaviour of the downloader. Running with `--help` shows all the available commands.
+
 ```
 java -jar world-downloader.jar --help
 ```
 
 The GUI can be disabled by including the `--no-gui` option, and specifying the server address:
+
 ```
 java -jar world-downloader.jar --no-gui -s address.to.server.com
 ```
 
 ### Running on Linux
-To easily download the latest release using the terminal, the following commands can be used:
+
+After building the jar, run it from the terminal:
+
 ```
-wget https://github.com/mircokroon/minecraft-world-downloader/releases/latest/download/world-downloader.jar
 java -jar world-downloader.jar -s address.to.server.com
 ```
 
 When running headless Java, the GUI should be disabled by including the GUI option:
+
 ```
 java -jar world-downloader.jar -s address.to.server.com --no-gui
 ```
 
-Some linux distributions may require `-Djdk.gtk.version=2` for the GUI to work:
+Some Linux distributions may require `-Djdk.gtk.version=2` for the GUI to work:
+
 ```
 java -Djdk.gtk.version=2 -jar world-downloader.jar
 ```
 
-
 ### Building from source
+
 <details>
-  <summary>Dependencies on linux</summary>
-  
-  ### debian/ubuntu
-  
+  <summary>Dependencies on Linux</summary>
+
+  #### debian/ubuntu
+
   ```
   sudo apt-get install default-jdk maven
   ```
 
-  ### arch/manjaro
-  
+  #### arch/manjaro
+
   ```
   sudo pacman -S --needed jdk-openjdk maven
   ```
@@ -84,25 +87,29 @@ java -Djdk.gtk.version=2 -jar world-downloader.jar
 
 <details>
   <summary>Build project to executable jar file</summary>
-  
- Building the project manually can be done using Maven:
+
+  Building the project manually can be done using Maven:
+
   ```
-  git clone https://github.com/mircokroon/minecraft-world-downloader
-  cd minecraft-world-downloader
+  git clone https://github.com/Jeffery879/world-downloader
+  cd world-downloader
   mvn package
   java -jar ./target/world-downloader.jar -s address.to.server.com
   ```
-
 </details>
 
 ### Contact
-<details>
-  <summary>Contact information</summary>
 
-  For problems, bugs, feature requests and questions about how to use the application, please [open an issue](https://github.com/mircokroon/minecraft-world-downloader/issues/new/choose) or discussion on GitHub. 
+For problems, bugs, or feature requests specific to this fork, please [open an issue](https://github.com/Jeffery879/world-downloader/issues) on this repository.
 
-  For other inquiries, email: mircokroon.github@gmail.com
-  
-  If you want to support this project, you can [donate through GitHub](https://github.com/sponsors/mircokroon?frequency=one-time&amount=5)
-</details>
+For questions about the original project's usage, see the [upstream issues page](https://github.com/mircokroon/minecraft-world-downloader/issues) or discussions.
 
+## Attribution & License
+
+This project is a modified version of [minecraft-world-downloader](https://github.com/mircokroon/minecraft-world-downloader) by **mircokroon**, used and modified under the terms of the GPL-3.0 license.
+
+- **Original project:** [mircokroon/minecraft-world-downloader](https://github.com/mircokroon/minecraft-world-downloader)
+- **Original license:** GNU General Public License v3.0 (GPL-3.0)
+- **This fork's license:** GNU General Public License v3.0 (GPL-3.0) — see [LICENSE](LICENSE)
+- **Modifications (2026):**
+  - Added support for Minecraft 26.1+
