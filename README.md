@@ -3,8 +3,6 @@
 A Minecraft world downloader that works as a proxy server between the client and the server to read & save chunk data. Download multiplayer worlds by connecting to them and walking around. Chunks can be sent back to the client to extend the render distance.
 
 > **Note:** This is a modified fork of [mircokroon/minecraft-world-downloader](https://github.com/mircokroon/minecraft-world-downloader). See [Attribution & License](#attribution--license) below for details.
->
-> This fork does not currently provide pre-built downloads — you'll need to [build it from source](#building-from-source).
 
 ### Basic usage
 
