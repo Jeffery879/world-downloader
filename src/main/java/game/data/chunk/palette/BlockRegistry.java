@@ -70,7 +70,21 @@ public class BlockRegistry implements Registry {
 
     @Override
     public BlockState getState(SpecificTag nbt) {
-        return nameStates.get(new BlockStateIdentifier(nbt));
+        BlockState state = nameStates.get(new BlockStateIdentifier(nbt));
+
+        // plain string entries refer to the block's default state; fall back to any state with
+        // this name if the identifier with empty properties does not match
+        if (state == null && nbt instanceof StringTag) {
+            String name = nbt.stringValue();
+            for (Map.Entry<BlockStateIdentifier, BlockState> entry : nameStates.entrySet()) {
+                if (Objects.equals(entry.getKey().name, name)) {
+                    state = entry.getValue();
+                    break;
+                }
+            }
+        }
+
+        return state;
     }
 
     @Override
@@ -98,7 +112,27 @@ class BlockStateIdentifier {
     CompoundTag properties;
 
     public BlockStateIdentifier(SpecificTag t) {
-        this(t.get("Name").stringValue(), t.get("Properties").asCompound());
+        if (t instanceof StringTag s) {
+            // 26.3+ palettes may be a plain list of block names (default states)
+            this.name = s.stringValue();
+            this.properties = new CompoundTag();
+            return;
+        }
+
+        CompoundTag compound = t.asCompound();
+
+        // 26.3+ uses id/properties, older versions use Name/Properties
+        Tag id = compound.get("id");
+        if (id.isError()) {
+            id = compound.get("Name");
+        }
+        Tag props = compound.get("properties");
+        if (props.isError()) {
+            props = compound.get("Properties");
+        }
+
+        this.name = id.stringValue();
+        this.properties = props.asCompound();
     }
 
     public BlockStateIdentifier(String name, CompoundTag properties) {

@@ -82,7 +82,7 @@ public class ChunkSection_1_13 extends ChunkSection {
 
 
     private ListTag createPalette() {
-        return new ListTag(Tag.TAG_COMPOUND, palette.toNbt());
+        return new ListTag(Tag.TAG_COMPOUND, palette.toNbt(getDataVersion()));
     }
 
 

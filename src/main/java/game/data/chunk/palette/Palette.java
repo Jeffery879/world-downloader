@@ -9,8 +9,11 @@ import game.data.chunk.ChunkSection;
 import java.util.stream.Stream;
 import packets.DataTypeProvider;
 import packets.builder.PacketBuilder;
+import se.llbit.nbt.CompoundTag;
 import se.llbit.nbt.ListTag;
 import se.llbit.nbt.SpecificTag;
+import se.llbit.nbt.StringTag;
+import se.llbit.nbt.Tag;
 
 /**
  * Class to hold a palette of a chunk.
@@ -171,7 +174,7 @@ public class Palette {
     /**
      * Create an NBT version of this palette using the block registry.
      */
-    public List<SpecificTag> toNbt() {
+    public List<SpecificTag> toNbt(int dataVersion) {
         List<SpecificTag> tags = new ArrayList<>();
 
         if (registry == null) {
@@ -182,10 +185,27 @@ public class Palette {
             State state = registry.getState(i);
             if (state == null) { state = registry.getDefaultState(); }
 
-            tags.add(state.toNbt());
+            tags.add(state.toNbt(dataVersion));
 
         }
         return tags;
+    }
+
+    /**
+     * Read the block/biome name from a palette entry written by toNbt, supporting both the
+     * pre-26.3 (Name) and 26.3+ (id) field names as well as plain string entries.
+     */
+    public static String entryName(SpecificTag tag) {
+        if (tag instanceof StringTag s) {
+            return s.stringValue();
+        }
+
+        CompoundTag compound = tag.asCompound();
+        Tag id = compound.get("id");
+        if (id.isError()) {
+            id = compound.get("Name");
+        }
+        return id.stringValue();
     }
 
     public int getBitsPerBlock() {

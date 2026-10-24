@@ -125,7 +125,7 @@ public class ChunkSection_1_18 extends ChunkSection_1_16 {
             }
         }
 
-        List<SpecificTag> paletteItems = palette.toNbt();
+        List<SpecificTag> paletteItems = palette.toNbt(getDataVersion());
         if (paletteItems.isEmpty()) {
             // this shouldn't ever happen
             System.err.println("Empty palette @ " + getY() + " :: " + palette);

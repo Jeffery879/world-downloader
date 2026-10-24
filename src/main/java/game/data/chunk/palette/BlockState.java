@@ -1,5 +1,6 @@
 package game.data.chunk.palette;
 
+import config.Version;
 import game.data.WorldManager;
 import game.data.chunk.palette.blending.DiscreteBlendEquation;
 import game.data.chunk.palette.blending.IBlendEquation;
@@ -85,6 +86,26 @@ public class BlockState implements State {
             rootTag.add("Properties", properties);
         }
 
+
+        return rootTag;
+    }
+
+    /**
+     * Convert this palette state to NBT format for the given data version. Since 26.3 the palette
+     * fields are called id/properties instead of Name/Properties.
+     */
+    @Override
+    public CompoundTag toNbt(int dataVersion) {
+        if (dataVersion < Version.V26_3.dataVersion) {
+            return toNbt();
+        }
+
+        CompoundTag rootTag = new CompoundTag();
+        rootTag.add("id", new StringTag(name));
+
+        if (properties != null && !properties.isEmpty()) {
+            rootTag.add("properties", properties);
+        }
 
         return rootTag;
     }

@@ -104,12 +104,12 @@ public class Chunk_1_17 extends Chunk_1_16 {
         Pair<BitSet, PacketBuilder> skyLight = writeLightToPacket(ChunkSection::getSkyLight);
         Pair<BitSet, PacketBuilder> blockLight = writeLightToPacket(ChunkSection::getBlockLight);
 
-        packet.writeBitSet(skyLight.getKey());
-        packet.writeBitSet(blockLight.getKey());
+        writeLightMask(packet, skyLight.getKey());
+        writeLightMask(packet, blockLight.getKey());
 
         // empty masks we just set to 0
-        packet.writeBitSet(new BitSet());
-        packet.writeBitSet(new BitSet());
+        writeLightMask(packet, new BitSet());
+        writeLightMask(packet, new BitSet());
 
         packet.writeVarInt(skyLight.getKey().cardinality());
         packet.writeByteArray(skyLight.getValue().toArray());
@@ -118,16 +118,24 @@ public class Chunk_1_17 extends Chunk_1_16 {
         packet.writeByteArray(blockLight.getValue().toArray());
     }
 
+    protected void writeLightMask(PacketBuilder packet, BitSet mask) {
+        packet.writeBitSet(mask);
+    }
+
+    protected BitSet readLightMask(DataTypeProvider provider) {
+        return provider.readBitSet();
+    }
+
 
     @Override
     public void updateLight(DataTypeProvider provider) {
         parseLightEdgesTrusted(provider);
 
-        BitSet skyLightMask = provider.readBitSet();
-        BitSet blockLightMask = provider.readBitSet();
+        BitSet skyLightMask = readLightMask(provider);
+        BitSet blockLightMask = readLightMask(provider);
 
-        BitSet emptySkyLightMask = provider.readBitSet();
-        BitSet emptyBlockLightMask = provider.readBitSet();
+        BitSet emptySkyLightMask = readLightMask(provider);
+        BitSet emptyBlockLightMask = readLightMask(provider);
 
         int numSkyLight = provider.readVarInt();
         if (skyLightMask.cardinality() != numSkyLight) {

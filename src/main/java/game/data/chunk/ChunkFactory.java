@@ -45,6 +45,7 @@ public class ChunkFactory {
      */
     private static Chunk getVersionedChunk(int dataVersion, CoordinateDim2D chunkPos) {
         return VersionReporter.select(dataVersion, Chunk.class,
+              Option.of(Version.V26_3, () -> new Chunk_26_3(chunkPos, dataVersion)),
               Option.of(Version.V26_1, () -> new Chunk_26_1(chunkPos, dataVersion)),
               Option.of(Version.V1_21_5, () -> new Chunk_1_21_5(chunkPos, dataVersion)),
               Option.of(Version.V1_20, () -> new Chunk_1_20(chunkPos, dataVersion)),

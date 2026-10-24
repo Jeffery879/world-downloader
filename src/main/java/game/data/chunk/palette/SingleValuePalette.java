@@ -61,8 +61,8 @@ public class SingleValuePalette extends Palette {
     }
 
     @Override
-    public List<SpecificTag> toNbt() {
-        return List.of(registry.getState(val).toNbt());
+    public List<SpecificTag> toNbt(int dataVersion) {
+        return List.of(registry.getState(val).toNbt(dataVersion));
     }
 
     public Palette asNormalPalette() {

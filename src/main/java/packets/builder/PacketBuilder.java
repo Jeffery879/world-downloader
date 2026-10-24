@@ -309,6 +309,15 @@ public class PacketBuilder {
         writeLongArray(longs);
     }
 
+    /**
+     * Since 26.3 light masks are length-prefixed byte arrays instead of long arrays.
+     */
+    public void writeBitSetAsBytes(BitSet bits) {
+        byte[] bytes = bits.toByteArray();
+        writeVarInt(bytes.length);
+        writeByteArray(bytes);
+    }
+
 
     public void copyRemainder(DataTypeProvider provider) {
         writeByteArray(provider.readByteArray(provider.remaining()));

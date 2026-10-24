@@ -34,7 +34,7 @@ public class DirectPalette extends Palette {
     }
 
     @Override
-    public List<SpecificTag> toNbt() {
+    public List<SpecificTag> toNbt(int dataVersion) {
         return List.of();
     }
 

@@ -153,8 +153,8 @@ public class Chunk_1_18 extends Chunk_1_17 {
 
     protected boolean containsBlockEntities(Palette p) {
         BlockEntityRegistry blockEntities = RegistryManager.getInstance().getBlockEntityRegistry();
-        for (SpecificTag tag : p.toNbt()) {
-            if (blockEntities.isBlockEntity(tag.get("Name").stringValue())) {
+        for (SpecificTag tag : p.toNbt(getDataVersion())) {
+            if (blockEntities.isBlockEntity(Palette.entryName(tag))) {
                 return true;
             }
         }

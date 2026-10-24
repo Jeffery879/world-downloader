@@ -224,6 +224,31 @@ public class PacketBuilderAndParserTest {
     }
 
     @Test
+    void parseBitAsBytes() {
+        BitSet before = new BitSet();
+        before.set(2);
+        before.set(4);
+        before.set(6);
+        before.set(9);
+        before.set(70);
+        builder.writeBitSetAsBytes(before);
+
+        BitSet after = getParser().readBitSetAsBytes();
+
+        assertThat(after).isEqualTo(before);
+    }
+
+    @Test
+    void parseEmptyBitAsBytes() {
+        BitSet before = new BitSet();
+        builder.writeBitSetAsBytes(before);
+
+        BitSet after = getParser().readBitSetAsBytes();
+
+        assertThat(after).isEqualTo(before);
+    }
+
+    @Test
     void parseCoordinatesOther() {
         long x = 1000;
         long y = 72;

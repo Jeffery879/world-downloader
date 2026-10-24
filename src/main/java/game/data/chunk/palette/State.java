@@ -7,4 +7,11 @@ import se.llbit.nbt.SpecificTag;
  */
 public interface State {
     SpecificTag toNbt();
+
+    /**
+     * Since 26.3 block palette NBT uses id/properties instead of Name/Properties.
+     */
+    default SpecificTag toNbt(int dataVersion) {
+        return toNbt();
+    }
 }

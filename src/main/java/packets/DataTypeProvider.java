@@ -307,6 +307,15 @@ public class DataTypeProvider {
         return BitSet.valueOf(longs);
     }
 
+    /**
+     * Since 26.3 light masks are length-prefixed byte arrays instead of long arrays.
+     */
+    public BitSet readBitSetAsBytes() {
+        int numBytes = readVarInt();
+        byte[] bytes = readByteArray(numBytes);
+        return BitSet.valueOf(bytes);
+    }
+
     public CoordinateDouble3D readDoubleCoordinates() {
         return new CoordinateDouble3D(readDouble(), readDouble(), readDouble());
     }
