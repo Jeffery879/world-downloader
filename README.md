@@ -25,7 +25,7 @@ If you run into any problems, check the [FAQ](https://github.com/mircokroon/mine
 ### Requirements
 
 - Java 21 or higher
-- Minecraft version 1.12.2+ // 1.13.2+ // 1.14.1+ // 1.15.2+ // 1.16.2+ // 1.17+ // 1.18+ // 1.19.3+ // 1.20+ // 1.21+ // 26.1+
+- Minecraft version 1.12.2+ // 1.13.2+ // 1.14.1+ // 1.15.2+ // 1.16.2+ // 1.17+ // 1.18+ // 1.19.3+ // 1.20+ // 1.21+ // 26.1+ // 26.3+
 
 ### Command-line
 
@@ -113,3 +113,4 @@ This project is a modified version of [minecraft-world-downloader](https://githu
 - **This fork's license:** GNU General Public License v3.0 (GPL-3.0) — see [LICENSE](LICENSE)
 - **Modifications (2026):**
   - Added support for Minecraft 26.1+
+  - Added support for Minecraft 26.3
